@@ -1,4 +1,3 @@
-
 import pygame, math, pymunk
 from pygame.locals import *
 from pymunk import pygame_util
@@ -20,6 +19,7 @@ class Box(pygame.sprite.Sprite):
         self.body.position = (x+width/2,y+height/2)
         self.shape = pymunk.Poly.create_box(self.body,(width,height))
 
+    
 def toPyGamePos(pos):
     return pos[0],600-pos[1]
 #class Arm(pygame.sprite.Sprite):
@@ -74,6 +74,7 @@ space.add(floorshape)
 FPS = 60
 i = 200
 j = 200
+
 while True:
     screen.fill((255,255,255))
     for event in pygame.event.get():
@@ -84,9 +85,9 @@ while True:
 #            i=j=0
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
-        i-= 10
+        i+= 100
     if keys[pygame.K_d]:
-        i+= 10
+        i-= 100
     if keys[pygame.K_w]:
         j+= 10
     if keys[pygame.K_s]:
@@ -94,16 +95,18 @@ while True:
     if keys[pygame.K_SPACE]:
         i=j=0
     
+    font = pygame.font.Font(None, 36)
+    text = font.render(str(j1.body.angle)[:7], 1, (10, 10, 10))
+    textpos = text.get_rect()
+    screen.blit(text, textpos)
             
-    force = i*math.sin(j1.body.angle),-i*math.cos(j1.body.angle)
+    force = 0,i
 #    force2 = j*math.sin(j2.body.angle),-j*math.cos(j2.body.angle)
     j1.body.apply_force_at_local_point((-40,0), force)
-    j1.body.apply_force_at_local_point((0,0), (0,j1.mass*(900)))
+    
 #    j2.body.apply_force_at_local_point((40,0), force2)
 #    j2.body.apply_force_at_local_point((0,0), (0,j2.mass*(900)))
-    forceRepre = toPyGamePos((430+int(force[0]), 300+int(force[1])))
-    pygame.draw.circle(screen,0x00ff00, (430,300), 5)
-    pygame.draw.circle(screen,0xff0000, (430+int(j1.body.force[0]),300+int(j1.body.force[1])), 5)
+    pygame.draw.polygon(screen,(0,0,0),[toPyGamePos(j1.body.local_to_world((-40,0))),toPyGamePos(j1.body.local_to_world((-40,i/600)))],4)
     space.step(1/FPS)
     space.debug_draw(drawopt)
     pygame.display.flip()
