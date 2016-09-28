@@ -98,7 +98,7 @@ while True:
     reperey = toPyGamePos(j1.body.local_to_world((0,50)))
     origin = toPyGamePos(j1.body.local_to_world((0,0)))
     
-    j1.body.apply_force_at_local_point(locPointOfApp, (0,0))
+    j1.body.apply_force_at_local_point((0,0),force)#PUTAIIIIIN TES CON
     
     j2.body.apply_force_at_local_point(locPointOfApp, (0,0))
     
