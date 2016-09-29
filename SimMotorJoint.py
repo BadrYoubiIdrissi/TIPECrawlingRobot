@@ -59,14 +59,10 @@ while True:
         robot.gearJoints[1].phase = 0
         
     
-    text = 
-    
-    text = [font.render("Angle 1 : " + str(robot.arm1.body.angle)[:7], 10, (10, 10, 10)),
-            font.render("Angle 1 : " + str(robot.arm1.body.angle)[:7], 10, (10, 10, 10))]
-    textpos = text.get_rect()
-    
-    textpos.x, textpos.y = 20, 20
-    screen.blit(text, textpos)
+    text = Text()
+    text.addLine("Angle 1 : " + str(robot.arm1.body.angle)[:7])
+    text.addLine("Angle 2 : " + str(robot.arm2.body.angle)[:7])
+    text.draw()
         
 
     space.debug_draw(drawopt)
