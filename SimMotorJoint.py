@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Simulation du robot
+
+@author: Badr Youbi Idrissi
+"""
+
 import pygame, pymunk
 from Robot import Robot
 from Text import Text
@@ -20,14 +27,18 @@ space.damping = 0.9
 robot = Robot()
 robot.addtoSpace(space)
 
+space.add()
+
 floor = pymunk.Body(body_type = pymunk.Body.STATIC)
-floor.friction = 1
+floor.friction = 1000
 floor.position = (0,0)
 floorshape = pymunk.Segment(floor, (-1000, -5), (1000, -5), 5)
 
 space.add(floorshape)
 FPS = 60
 
+couple1 = 0
+couple2 = 0
 
 while True:
     
@@ -40,33 +51,35 @@ while True:
     
     keys = pygame.key.get_pressed()
 
+
     if keys[pygame.K_a]:
-        robot.gearJoints[0].phase -= 0.1
-        robot.gearJoints[1].phase -= 0.1
+        couple1 += 10
+        robot.applyTorque(robot.pivotJoints[0], couple1)
         
     if keys[pygame.K_d]:
-        robot.gearJoints[0].phase += 0.1
-        robot.gearJoints[1].phase += 0.1
-        
+        couple1 -= 10
+        robot.applyTorque(robot.pivotJoints[0], couple1)
+#        
     if keys[pygame.K_w]:
-        robot.gearJoints[1].phase -= 0.1
+        couple2 += 10
+        robot.applyTorque(robot.pivotJoints[1], couple2)
         
     if keys[pygame.K_s]:
-        robot.gearJoints[1].phase += 0.1
-        
+        couple2 -= 10
+        robot.applyTorque(robot.pivotJoints[1], couple2)
+
     if keys[pygame.K_SPACE]:
-        robot.gearJoints[0].phase = 0
-        robot.gearJoints[1].phase = 0
+        couple1 = couple2 =0
         
     
-    text = Text()
-    text.addLine("Angle 1 : " + str(robot.arm1.body.angle)[:7])
-    text.addLine("Angle 2 : " + str(robot.arm2.body.angle)[:7])
-    text.draw()
+#    text = Text()
+#    text.addLine("Angle 1 : " + str(robot.arm1.body.angle)[:7])
+#    text.addLine("Angle 2 : " + str(robot.arm2.body.angle)[:7])
+#    text.draw()
         
 
     space.debug_draw(drawopt)
-    robot.drawRefs()
+#    robot.drawRefs()
     pygame.display.flip()
     clock.tick(FPS)
     space.step(1/60)
