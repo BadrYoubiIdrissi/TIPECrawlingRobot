@@ -20,7 +20,7 @@ class Referentiel():
         #Force Résultante
         pygame.draw.polygon(pygame.display.get_surface(),(0,0,255),
                             [self.toPyGame(self.body.position),
-                             self.toPyGame(self.body.position + self.body.force)],4)
+                             self.toPyGame(self.body.position + 30 * self.body.force.normalized())],4)
                              
     def toPyGame(self, pos):
         return pos[0],600-pos[1]
